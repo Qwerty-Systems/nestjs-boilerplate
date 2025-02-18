@@ -1,3 +1,7 @@
+import { TenantSchemaClass } from '../../../../../tenants/infrastructure/persistence/document/entities/tenant.schema';
+
+import mongoose from 'mongoose';
+
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { now, HydratedDocument } from 'mongoose';
 
@@ -17,6 +21,13 @@ export type UserSchemaDocument = HydratedDocument<UserSchemaClass>;
   },
 })
 export class UserSchemaClass extends EntityDocumentHelper {
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'TenantSchemaClass',
+    autopopulate: true,
+  })
+  tenant?: TenantSchemaClass | null;
+
   @Prop({
     type: String,
     unique: true,

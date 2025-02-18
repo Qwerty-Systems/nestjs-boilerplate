@@ -1,4 +1,6 @@
 import { User } from '../../../../domain/user';
+import { TenantMapper } from '../../../../../tenants/infrastructure/persistence/document/mappers/tenant.mapper';
+
 import { UserSchemaClass } from '../entities/user.schema';
 import { FileSchemaClass } from '../../../../../files/infrastructure/persistence/document/entities/file.schema';
 import { FileMapper } from '../../../../../files/infrastructure/persistence/document/mappers/file.mapper';
@@ -10,6 +12,12 @@ import { StatusSchema } from '../../../../../statuses/infrastructure/persistence
 export class UserMapper {
   static toDomain(raw: UserSchemaClass): User {
     const domainEntity = new User();
+    if (raw.tenant) {
+      domainEntity.tenant = TenantMapper.toDomain(raw.tenant);
+    } else if (raw.tenant === null) {
+      domainEntity.tenant = null;
+    }
+
     domainEntity.id = raw._id.toString();
     domainEntity.email = raw.email;
     domainEntity.password = raw.password;
@@ -64,6 +72,14 @@ export class UserMapper {
     }
 
     const persistenceSchema = new UserSchemaClass();
+    if (domainEntity.tenant) {
+      persistenceSchema.tenant = TenantMapper.toPersistence(
+        domainEntity.tenant,
+      );
+    } else if (domainEntity.tenant === null) {
+      persistenceSchema.tenant = null;
+    }
+
     if (domainEntity.id && typeof domainEntity.id === 'string') {
       persistenceSchema._id = domainEntity.id;
     }

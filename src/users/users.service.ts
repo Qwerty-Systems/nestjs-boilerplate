@@ -1,3 +1,6 @@
+import { TenantsService } from '../tenants/tenants.service';
+import { Tenant } from '../tenants/domain/tenant';
+
 import {
   HttpStatus,
   Injectable,
@@ -22,6 +25,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 @Injectable()
 export class UsersService {
   constructor(
+    private readonly tenantService: TenantsService,
+
     private readonly usersRepository: UserRepository,
     private readonly filesService: FilesService,
   ) {}
@@ -29,6 +34,24 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     // Do not remove comment below.
     // <creating-property />
+    let tenant: Tenant | null | undefined = undefined;
+
+    if (createUserDto.tenant) {
+      const tenantObject = await this.tenantService.findById(
+        createUserDto.tenant.id,
+      );
+      if (!tenantObject) {
+        throw new UnprocessableEntityException({
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            tenant: 'notExists',
+          },
+        });
+      }
+      tenant = tenantObject;
+    } else if (createUserDto.tenant === null) {
+      tenant = null;
+    }
 
     let password: string | undefined = undefined;
 
@@ -116,6 +139,8 @@ export class UsersService {
     return this.usersRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
+      tenant,
+
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
       email: email,
@@ -175,6 +200,24 @@ export class UsersService {
   ): Promise<User | null> {
     // Do not remove comment below.
     // <updating-property />
+    let tenant: Tenant | null | undefined = undefined;
+
+    if (updateUserDto.tenant) {
+      const tenantObject = await this.tenantService.findById(
+        updateUserDto.tenant.id,
+      );
+      if (!tenantObject) {
+        throw new UnprocessableEntityException({
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            tenant: 'notExists',
+          },
+        });
+      }
+      tenant = tenantObject;
+    } else if (updateUserDto.tenant === null) {
+      tenant = null;
+    }
 
     let password: string | undefined = undefined;
 
@@ -270,6 +313,8 @@ export class UsersService {
     return this.usersRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
+      tenant,
+
       firstName: updateUserDto.firstName,
       lastName: updateUserDto.lastName,
       email,
