@@ -181,6 +181,10 @@ export class UsersService {
     return this.usersRepository.findByEmail(email);
   }
 
+  findByPhone(phone: User['phone']): Promise<NullableType<User>> {
+    return this.usersRepository.findByPhone(phone);
+  }
+
   findBySocialIdAndProvider({
     socialId,
     provider,

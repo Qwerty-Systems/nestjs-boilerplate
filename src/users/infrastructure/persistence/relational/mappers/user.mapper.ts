@@ -1,4 +1,5 @@
 import { FileEntity } from '../../../../../files/infrastructure/persistence/relational/entities/file.entity';
+
 import { TenantMapper } from '../../../../../tenants/infrastructure/persistence/relational/mappers/tenant.mapper';
 
 import { FileMapper } from '../../../../../files/infrastructure/persistence/relational/mappers/file.mapper';
@@ -10,6 +11,8 @@ import { UserEntity } from '../entities/user.entity';
 export class UserMapper {
   static toDomain(raw: UserEntity): User {
     const domainEntity = new User();
+    domainEntity.phone = raw.phone;
+
     if (raw.tenant) {
       domainEntity.tenant = TenantMapper.toDomain(raw.tenant);
     } else if (raw.tenant === null) {
@@ -60,6 +63,8 @@ export class UserMapper {
     }
 
     const persistenceEntity = new UserEntity();
+    persistenceEntity.phone = domainEntity.phone;
+
     if (domainEntity.tenant) {
       persistenceEntity.tenant = TenantMapper.toPersistence(
         domainEntity.tenant,

@@ -24,6 +24,7 @@ import { LoginResponseDto } from './dto/login-response.dto';
 import { NullableType } from '../utils/types/nullable.type';
 import { User } from '../users/domain/user';
 import { RefreshResponseDto } from './dto/refresh-response.dto';
+import { AuthPhoneLoginDto } from './dto/auth-phone-login.dto';
 
 @ApiTags('Auth')
 @Controller({
@@ -42,6 +43,17 @@ export class AuthController {
   })
   @HttpCode(HttpStatus.OK)
   public login(@Body() loginDto: AuthEmailLoginDto): Promise<LoginResponseDto> {
+    return this.service.validateLogin(loginDto);
+  }
+
+  @Post('phone/login')
+  @ApiOkResponse({
+    type: LoginResponseDto,
+  })
+  @HttpCode(HttpStatus.OK)
+  public PhoneLogin(
+    @Body() loginDto: AuthPhoneLoginDto,
+  ): Promise<LoginResponseDto> {
     return this.service.validateLogin(loginDto);
   }
 

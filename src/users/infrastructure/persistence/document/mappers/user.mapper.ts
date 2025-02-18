@@ -1,4 +1,5 @@
 import { User } from '../../../../domain/user';
+
 import { TenantMapper } from '../../../../../tenants/infrastructure/persistence/document/mappers/tenant.mapper';
 
 import { UserSchemaClass } from '../entities/user.schema';
@@ -12,6 +13,8 @@ import { StatusSchema } from '../../../../../statuses/infrastructure/persistence
 export class UserMapper {
   static toDomain(raw: UserSchemaClass): User {
     const domainEntity = new User();
+    domainEntity.phone = raw.phone;
+
     if (raw.tenant) {
       domainEntity.tenant = TenantMapper.toDomain(raw.tenant);
     } else if (raw.tenant === null) {
@@ -72,6 +75,8 @@ export class UserMapper {
     }
 
     const persistenceSchema = new UserSchemaClass();
+    persistenceSchema.phone = domainEntity.phone;
+
     if (domainEntity.tenant) {
       persistenceSchema.tenant = TenantMapper.toPersistence(
         domainEntity.tenant,

@@ -22,6 +22,11 @@ export type UserSchemaDocument = HydratedDocument<UserSchemaClass>;
 })
 export class UserSchemaClass extends EntityDocumentHelper {
   @Prop({
+    type: Number,
+  })
+  phone?: number | null;
+
+  @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'TenantSchemaClass',
     autopopulate: true,

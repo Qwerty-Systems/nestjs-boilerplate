@@ -28,6 +28,7 @@ import { Session } from '../session/domain/session';
 import { SessionService } from '../session/session.service';
 import { StatusEnum } from '../statuses/statuses.enum';
 import { User } from '../users/domain/user';
+import { AuthPhoneLoginDto } from './dto/auth-phone-login.dto';
 
 @Injectable()
 export class AuthService {
@@ -39,8 +40,13 @@ export class AuthService {
     private configService: ConfigService<AllConfigType>,
   ) {}
 
-  async validateLogin(loginDto: AuthEmailLoginDto): Promise<LoginResponseDto> {
-    const user = await this.usersService.findByEmail(loginDto.email);
+  async validateLogin(
+    loginDto: AuthEmailLoginDto | AuthPhoneLoginDto,
+  ): Promise<LoginResponseDto> {
+    const user =
+      'email' in loginDto
+        ? await this.usersService.findByEmail(loginDto.email)
+        : await this.usersService.findByPhone(loginDto.phone);
 
     if (!user) {
       throw new UnprocessableEntityException({
