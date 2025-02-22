@@ -37,5 +37,5 @@ services:
     ports:
       - ${APP_PORT}:${APP_PORT}
 
-# volumes:
-#   boilerplate-db:
+volumes:
+  boilerplate-db:
