@@ -56,6 +56,7 @@ import { ResidencesModule } from './residences/residences.module';
 
 import { AccountsModule } from './accounts/accounts.module';
 import { SentryModule } from '@sentry/nestjs/setup';
+import { TenantConfigsModule } from './tenant-configs/tenant-configs.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { SentryModule } from '@sentry/nestjs/setup';
     AccountsModule,
     ResidencesModule,
     ResidencesModule,
+    TenantConfigsModule,
     RegionsModule,
     SettingsModule,
     TenantTypesModule,
