@@ -96,8 +96,17 @@ import { TenantConfigsModule } from './tenant-configs/tenant-configs.module';
 import { TenantDataSourceProvider } from './providers/tenant-data-source.provider';
 import { TenantMiddleware } from './middleware/tenant.middleware';
 
+import { OnboardingsModule } from './onboardings/onboardings.module';
+
+import { AuditLogsModule } from './audit-logs/audit-logs.module';
+import { PaymentNotificationsModule } from './payment-notifications/payment-notifications.module';
+
 @Module({
   imports: [
+    AuditLogsModule,
+    OnboardingsModule,
+    PaymentNotificationsModule,
+    //SentryModule.forRoot(),
     CreditBalancesModule,
     PaymentAggregatorsModule,
     PaymentMethodsModule,
